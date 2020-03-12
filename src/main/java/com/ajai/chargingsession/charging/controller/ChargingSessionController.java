@@ -6,7 +6,6 @@ import static com.ajai.chargingsession.constants.UrlConstants.URL_CHARGING_SESSI
 import static com.ajai.chargingsession.constants.UrlConstants.URL_CHARGING_SESSIONS;
 import static com.ajai.chargingsession.constants.UrlConstants.URL_CHARGING_SESSIONS_SUMMARY;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import java.util.Map;
 import java.util.UUID;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -24,7 +23,6 @@ import com.ajai.chargingsession.charging.dto.ChargingStationDTO;
 import com.ajai.chargingsession.charging.handlers.ChargingSessionsHandler;
 import com.ajai.chargingsession.charging.session.ChargingSession;
 import com.ajai.chargingsession.charging.session.ChargingSessionSummary;
-import com.ajai.chargingsession.charging.session.StatusEnum;
 import io.swagger.annotations.ApiOperation;
 
 /**
@@ -56,7 +54,6 @@ public class ChargingSessionController {
   @ApiOperation(value = "View available charging sessions", response = Iterable.class)
   @GetMapping(path = URL_CHARGING_SESSIONS, produces = APPLICATION_JSON_VALUE)
   public HttpEntity<Iterable<ChargingSession>> getAllChargingSessions() {
-    System.out.println("VIEW all charging sessions");
     return new ResponseEntity<>(handler.getAllChargingSessions(), HttpStatus.OK);
   }
 
@@ -65,7 +62,6 @@ public class ChargingSessionController {
       produces = APPLICATION_JSON_VALUE)
   public HttpEntity<ChargingSession> startChargingSession(
       @Valid @RequestBody ChargingStationDTO chargingStationDTO) {
-    System.out.println("START charging session for station : " + chargingStationDTO.getStationId());
     return new ResponseEntity<>(handler.startChargingSession(chargingStationDTO),
         HttpStatus.CREATED);
   }
@@ -75,7 +71,6 @@ public class ChargingSessionController {
       produces = APPLICATION_JSON_VALUE)
   public HttpEntity<ChargingSession> stopChargingSession(
       @PathVariable(CHARGING_SESSION_ID) @NotBlank UUID chargingSessionId) {
-    System.out.println("STOP charging session request for : " + chargingSessionId);
     return new ResponseEntity<>(handler.stopChargingSession(chargingSessionId), HttpStatus.OK);
   }
 
@@ -84,10 +79,7 @@ public class ChargingSessionController {
   @GetMapping(path = URL_CHARGING_SESSIONS_SUMMARY, produces = APPLICATION_JSON_VALUE)
   public HttpEntity<ChargingSessionSummary> getChargingSessionSummary(@Valid @RequestParam(
       value = SECONDS, defaultValue = DEFAULT_NO_OF_SECONDS) @NotBlank long seconds) {
-    System.out.println("SUMMARY of charging sessions");
-    
     ChargingSessionSummary summary = new ChargingSessionSummary(handler.getChargingSessionSummary(seconds));
-    System.out.println(summary.toString());
     return new ResponseEntity<>(summary, HttpStatus.OK);
   }
 
