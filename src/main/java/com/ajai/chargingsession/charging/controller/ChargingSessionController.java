@@ -1,11 +1,8 @@
 package com.ajai.chargingsession.charging.controller;
 
-import static com.ajai.chargingsession.constants.Constants.CHARGING_SESSION_ID;
-import static com.ajai.chargingsession.constants.Constants.SECONDS;
-import static com.ajai.chargingsession.constants.UrlConstants.URL_CHARGING_SESSION;
-import static com.ajai.chargingsession.constants.UrlConstants.URL_CHARGING_SESSIONS;
-import static com.ajai.chargingsession.constants.UrlConstants.URL_CHARGING_SESSIONS_SUMMARY;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static com.ajai.chargingsession.constants.UrlConstants.*;
+import static com.ajai.chargingsession.constants.Constants.*;
 import java.util.UUID;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -79,7 +76,8 @@ public class ChargingSessionController {
   @GetMapping(path = URL_CHARGING_SESSIONS_SUMMARY, produces = APPLICATION_JSON_VALUE)
   public HttpEntity<ChargingSessionSummary> getChargingSessionSummary(@Valid @RequestParam(
       value = SECONDS, defaultValue = DEFAULT_NO_OF_SECONDS) @NotBlank long seconds) {
-    ChargingSessionSummary summary = new ChargingSessionSummary(handler.getChargingSessionSummary(seconds));
+    ChargingSessionSummary summary =
+        new ChargingSessionSummary(handler.getChargingSessionSummary(seconds));
     return new ResponseEntity<>(summary, HttpStatus.OK);
   }
 
