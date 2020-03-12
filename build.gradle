@@ -1,0 +1,92 @@
+
+
+plugins {
+    id 'org.springframework.boot' version '2.2.5.RELEASE'
+}
+
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'eclipse'
+apply plugin: 'jacoco'
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+version = '1.0'
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    
+    implementation 'com.google.guava:guava:28.2-jre'
+    
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+    
+    implementation 'com.github.spotbugs:spotbugs:4.0.0'
+    
+    implementation 'com.vmlens:annotation:1.0.3'
+    
+  
+    testImplementation ('org.springframework.boot:spring-boot-test') {
+        exclude group: 'junit', module: 'junit'
+    }
+    
+    testCompile 'org.springframework:spring-test:5.2.4.RELEASE'
+    testCompile 'org.springframework.boot:spring-boot-test-autoconfigure'
+    
+    testCompile 'com.jayway.jsonpath:json-path'
+    testCompile 'com.jayway.jsonpath:json-path-assert'
+    
+    testCompile 'com.google.code.gson:gson:2.8.6'
+    
+    testCompile 'org.hamcrest:hamcrest-all:1.3'
+    
+    testCompile 'org.mockito:mockito-junit-jupiter:3.3.0'
+    testCompile 'org.mockito:mockito-core:3.3.0'
+    
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.4.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.2'
+    
+}
+
+javadoc {
+  classpath += sourceSets.test.compileClasspath
+  source += sourceSets.test.allJava
+}
+
+
+tasks.withType(Javadoc) {
+  options.addStringOption('Xdoclint:none', '-quiet')
+  options.addStringOption('encoding', 'UTF-8')
+  options.addStringOption('charSet', 'UTF-8')
+}
+
+test {
+    useJUnitPlatform()
+    
+    testLogging {
+		events "passed", "skipped", "failed"
+	}
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
+test.finalizedBy jacocoTestReport
+
